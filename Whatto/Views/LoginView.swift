@@ -27,7 +27,7 @@ struct LoginView: View {
             
             VStack(spacing: 20) {
                 
-                Text("Sign in with")
+                Text("Sign in with:")
                 
                 Button(action: {
                     startingAuthenticationSession = true
