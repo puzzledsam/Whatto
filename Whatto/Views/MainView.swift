@@ -42,7 +42,7 @@ struct MainView: View {
                 }
                 .padding()
             } else {
-                Text("Click the button below to pick a random movie")
+                Text("To begin, tap the button below")
             }
             
             Button("Pick a random movie") {
