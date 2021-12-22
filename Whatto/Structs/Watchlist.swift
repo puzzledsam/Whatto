@@ -15,8 +15,18 @@ struct Movies: Codable {
     let movie: Movie
 }
 
-struct Movie: Codable {
+struct Movie: Codable, Equatable {
     let title: String
     let poster: String?
     let year: Int?
+    let ids: MovieIDs?
+    
+    static func ==(a: Movie, b: Movie) -> Bool {
+        return a.title == b.title && a.year == b.year
+    }
+}
+
+struct MovieIDs: Codable {
+    let simkl: Int?
+    let tmdb: String?
 }

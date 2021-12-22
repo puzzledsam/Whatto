@@ -12,6 +12,7 @@ struct MainView: View {
     @EnvironmentObject var authentication: Authentication
     @StateObject private var mainVM = MainViewModel()
     
+    @State var disabledRandomizer = true
     @State var randMovie: Movie? = nil
     
     var body: some View {
@@ -27,7 +28,13 @@ struct MainView: View {
                     if let posterId = selectedMovie.poster {
                         AsyncImage(url: URL(string: "https://simkl.in/posters/\(posterId)_m.jpg")) { image in
                             image
+                                .resizable()
                                 .scaledToFit()
+                                .onTapGesture {
+                                    mainVM.filterByService("Netflix") { result in
+                                        print(result)
+                                    }
+                                }
                         } placeholder: {
                             ProgressView()
                         }
@@ -40,14 +47,18 @@ struct MainView: View {
             
             Button("Pick a random movie") {
                 withAnimation {
-                    randMovie = mainVM.watchlist?.movies?.randomElement()?.movie
+                    let t = randMovie
+                    while (randMovie == t) {
+                        randMovie = mainVM.filteredList.randomElement()?.movie
+                    }
                 }
                 print(randMovie ?? "No Movie")
             }
             .padding()
             .foregroundColor(.white)
-            .background(Color.blue)
+            .background(disabledRandomizer ? Color.gray : Color.blue)
             .cornerRadius(10)
+            .disabled(disabledRandomizer)
             
             Spacer()
                 .frame(height: 30.0)
@@ -64,8 +75,23 @@ struct MainView: View {
             .cornerRadius(10)
         }
         .onAppear {
-            mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { result in
-                print("Get Watchlist result: \(result)")
+            mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { fetchResult in
+                print("Get Watchlist result: \(fetchResult)")
+                switch (fetchResult) {
+                case .success:
+                    print("Watchlist fetch succeeded, will filter for Netflix only")
+                    mainVM.filterByService("Netflix") { filterResult in
+                        print("Filter watchlist result: \(filterResult)")
+                        switch (filterResult) {
+                        case .success:
+                            disabledRandomizer = false
+                        case .failure:
+                            break
+                        }
+                    }
+                case.failure:
+                    print("Watchlist fetch failed, won't filter")
+                }
             }
         }
     }
