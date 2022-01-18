@@ -12,7 +12,6 @@
 		51265205276AA36E001A366C /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = 51265204276AA36E001A366C /* BetterSafariView */; };
 		513E4919277026C30057E49A /* ApiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513E4918277026C30057E49A /* ApiKeys.swift */; };
 		51921469276C69E500D5119E /* SimklWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51921468276C69E500D5119E /* SimklWatchlist.swift */; };
-		519E0D56276BCC7F00323F1F /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519E0D55276BCC7F00323F1F /* LoginViewModel.swift */; };
 		519E0D58276BCF7300323F1F /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519E0D57276BCF7300323F1F /* Authentication.swift */; };
 		51B9327D276A7DAD00B73682 /* WhattoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9327C276A7DAD00B73682 /* WhattoApp.swift */; };
 		51B9327F276A7DAD00B73682 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9327E276A7DAD00B73682 /* LoginView.swift */; };
@@ -30,7 +29,6 @@
 		510A4200276D369000709864 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		513E4918277026C30057E49A /* ApiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ApiKeys.swift; path = Whatto/Classes/ApiKeys.swift; sourceTree = SOURCE_ROOT; };
 		51921468276C69E500D5119E /* SimklWatchlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimklWatchlist.swift; sourceTree = "<group>"; };
-		519E0D55276BCC7F00323F1F /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		519E0D57276BCF7300323F1F /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		51B93279276A7DAD00B73682 /* Whatto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whatto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51B9327C276A7DAD00B73682 /* WhattoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhattoApp.swift; sourceTree = "<group>"; };
@@ -71,7 +69,6 @@
 		510A41FF276D367900709864 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				519E0D55276BCC7F00323F1F /* LoginViewModel.swift */,
 				510A4200276D369000709864 /* MainViewModel.swift */,
 			);
 			path = Models;
@@ -219,7 +216,6 @@
 				513E4919277026C30057E49A /* ApiKeys.swift in Sources */,
 				51B9327D276A7DAD00B73682 /* WhattoApp.swift in Sources */,
 				51BF4375279765970009A9DF /* MovieDetails.swift in Sources */,
-				519E0D56276BCC7F00323F1F /* LoginViewModel.swift in Sources */,
 				51BF4373279763C70009A9DF /* Watchlist.swift in Sources */,
 				51B9328B276A84B400B73682 /* SimklAPI.swift in Sources */,
 				519E0D58276BCF7300323F1F /* Authentication.swift in Sources */,

@@ -88,11 +88,6 @@ struct MainView: View {
         .onAppear {
             mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { fetchResult in
                 print("Get Watchlist result: \(fetchResult)")
-                print("Watchlist fetch returned 1")
-                print("Watchlist fetch returned 2")
-                print("Watchlist fetch returned 3")
-                print("Watchlist fetch returned 4")
-                print("Watchlist fetch returned 5")
                 switch (fetchResult) {
                 case .success:
                     print("Watchlist fetch succeeded, will filter")

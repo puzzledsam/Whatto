@@ -13,7 +13,7 @@ class SimklAPI {
     
     static let shared = SimklAPI()
     enum APIError: Error {
-        case error
+        case error, invalidURL
     }
     
     /*func getAuthenticationPin() {
@@ -34,7 +34,33 @@ class SimklAPI {
         task.resume()
     }*/
     
-    func authenticate(authCode: String, completion: @escaping (Result<String,APIError>) -> Void) {
+    func authenticate(authCode: String) async throws -> String {
+        guard let url = URL(string: "https://api.simkl.com/oauth/token") else {
+            throw APIError.invalidURL
+        }
+        
+        let body = ["code": authCode,
+                    "client_id": ApiKeys.getSimklClientId(),
+                    "client_secret": ApiKeys.getSimklClientSecret(),
+                    "redirect_uri": "whatto%3A%2F%2F",
+                    "grant_type": "authorization_code"]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(body)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let decodedResponse = try JSONDecoder().decode([String: String].self, from: data)
+        guard let accessToken = decodedResponse["access_token"] else {
+            throw APIError.error
+        }
+        
+        return accessToken
+    }
+    
+    /*func oldthenticate(authCode: String, completion: @escaping (Result<String,APIError>) -> Void) {
         let url = URL(string: "https://api.simkl.com/oauth/token")!
         
         let body = ["code": authCode,
@@ -69,7 +95,7 @@ class SimklAPI {
         }
         
         task.resume()
-    }
+    }*/
     
     func getWatchlist(accessToken: String, type: String = "movies", status: String = "plantowatch", completion: @escaping (Result<SimklWatchlist,APIError>) -> Void) {
         let url = URL(string: "https://api.simkl.com/sync/all-items/\(type)/\(status)")!

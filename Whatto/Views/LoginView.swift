@@ -11,8 +11,8 @@ import BetterSafariView
 struct LoginView: View {
     
     @EnvironmentObject var authentication: Authentication
-    @StateObject private var loginViewModel = LoginViewModel()
     
+    @State private var showProgressView = false
     @State private var startingAuthenticationSession = false
     
     var body: some View {
@@ -43,25 +43,26 @@ struct LoginView: View {
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary, lineWidth: 3))
                 .webAuthenticationSession(isPresented: $startingAuthenticationSession) {
-                    WebAuthenticationSession(url: URL(string: SimklAPI.loginURL)!, callbackURLScheme: "whatto") { callbackURL, error in
+                    showProgressView = true
+                    return WebAuthenticationSession(url: URL(string: SimklAPI.loginURL)!, callbackURLScheme: "whatto") { callbackURL, error in
                         if let callbackURL = callbackURL {
                             print("Callback URL received")
                             if let codeValue = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems?.first(where: { $0.name == "code" })?.value {
                                 print("Decoded auth code from callback URL, requesting exchange for access token")
-                                loginViewModel.signIn(authCode: codeValue) { result in
-                                    switch result {
-                                    case .success(let token):
+                                Task {
+                                    do {
+                                        let token = try await SimklAPI.shared.authenticate(authCode: codeValue)
+                                        
                                         print("Sign in successful")
+                                        showProgressView = false
                                         if authentication.storeAccessToken(token) {
                                             print("Access token stored in Keychain successfully")
-                                            DispatchQueue.main.sync {
-                                                authentication.validateAuthentication(true)
-                                            }
+                                            authentication.validateAuthentication(true)
                                         } else {
                                             print("Access token could not be stored in Keychain")
                                         }
-                                    case .failure:
-                                        print("Sign in failed")
+                                    } catch {
+                                        print("Authentication request failed with error: \(error)")
                                     }
                                 }
                             }
@@ -82,9 +83,9 @@ struct LoginView: View {
             .cornerRadius(10)
         }
         .padding()
-        .disabled(loginViewModel.showProgressView)
+        .disabled(showProgressView)
         .overlay {
-            if loginViewModel.showProgressView {
+            if showProgressView {
                 ProgressView()
             }
         }
