@@ -11,7 +11,7 @@ class MainViewModel: ObservableObject {
     @Published var watchlist: Watchlist? = nil
     @Published var filteredList: [Movies] = []
     
-    var serviceFilters: [WatchProvider] = []
+    var serviceFilters: [WatchProvider: Bool] = [:]
     
     func getWatchlist(accessToken: String, completion: @escaping (Result<Bool,SimklAPI.APIError>) -> Void) {
         SimklAPI.shared.getWatchlist(accessToken: accessToken) { [unowned self](result: Result<Watchlist, SimklAPI.APIError>) in
@@ -60,37 +60,25 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    func addServiceFilter(_ watchProvider: WatchProvider) {
-        serviceFilters.append(watchProvider)
-    }
-    
-    func removeServiceFilter(_ watchProvider: WatchProvider) {
-        if let index = serviceFilters.firstIndex(of: watchProvider) {
-            serviceFilters.remove(at: index)
-        }
-    }
-    
-    func clearServiceFilters() {
-        serviceFilters = []
-    }
-    
     func refreshFilteredList() {
         filteredList = []
         
-        if serviceFilters.isEmpty {filteredList = watchlist?.movies ?? []}
+        if !serviceFilters.values.contains(true) {filteredList = watchlist?.movies ?? []}
         
         for filter in serviceFilters {
-            filterByService(filter.rawValue) { filterResult in
-                switch (filterResult) {
-                case .success(let movieList):
-                    for i in movieList {
-                        if !self.filteredList.contains(i) {
-                            self.filteredList.append(i)
+            if filter.value {
+                filterByService(filter.key.rawValue) { filterResult in
+                    switch (filterResult) {
+                    case .success(let movieList):
+                        for i in movieList {
+                            if !self.filteredList.contains(i) {
+                                self.filteredList.append(i)
+                            }
                         }
+                    case .failure:
+                        print("Refreshing filtered list failed!")
+                        return
                     }
-                case .failure:
-                    print("Refreshing filtered list failed!")
-                    return
                 }
             }
         }

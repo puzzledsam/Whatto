@@ -14,6 +14,7 @@ struct MainView: View {
     
     @State private var disabledRandomizer = true
     @State var randMovie: Movie? = nil
+    
     @State private var netflixFilterToggle = false
     @State private var disneyFilterToggle = false
     
@@ -60,23 +61,13 @@ struct MainView: View {
             
             Toggle("Netflix", isOn: $netflixFilterToggle)
                 .onChange(of: netflixFilterToggle) { value in
-                    if value {
-                        mainVM.addServiceFilter(WatchProvider.Netflix)
-                    } else {
-                        mainVM.removeServiceFilter(WatchProvider.Netflix)
-                    }
-                    
+                    mainVM.serviceFilters[.Netflix] = value
                     mainVM.refreshFilteredList()
                 }
             
             Toggle("Disney", isOn: $disneyFilterToggle)
                 .onChange(of: disneyFilterToggle) { value in
-                    if value {
-                        mainVM.addServiceFilter(WatchProvider.DisneyPlus)
-                    } else {
-                        mainVM.removeServiceFilter(WatchProvider.DisneyPlus)
-                    }
-                    
+                    mainVM.serviceFilters[.DisneyPlus] = value
                     mainVM.refreshFilteredList()
                 }
             
