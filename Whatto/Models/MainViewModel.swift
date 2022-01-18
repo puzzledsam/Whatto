@@ -10,7 +10,19 @@ class MainViewModel: ObservableObject {
     
     @Published var watchlist = Watchlist()
     
-    func getWatchlist(accessToken: String, completion: @escaping (Result<Bool,SimklAPI.APIError>) -> Void) {
+    func getWatchlist(accessToken: String) async {
+        do {
+            let SimklWatchlist = try await SimklAPI.shared.getWatchlist(accessToken: accessToken)
+            
+            SimklWatchlist.movies?.forEach({ SimklMovie in
+                watchlist.addMovie(SimklMovie.movie, providers: []) // TODO: Finish re-implementing providers
+            })
+        } catch {
+            print("Watchlist fetch request failed with error: \(error)")
+        }
+    }
+    
+    /*func getWatchlist(accessToken: String, completion: @escaping (Result<Bool,SimklAPI.APIError>) -> Void) {
         SimklAPI.shared.getWatchlist(accessToken: accessToken) { [unowned self](result: Result<SimklWatchlist, SimklAPI.APIError>) in
             switch result {
             case .success(let decodedList):
@@ -24,7 +36,7 @@ class MainViewModel: ObservableObject {
                 completion(.failure(SimklAPI.APIError.error))
             }
         }
-    }
+    }*/
     
     func getMovieWatchProviders(tmdbId: String, completion: @escaping (Result<[WatchProvider],TmdbAPI.APIError>) -> Void) {
         var providerList: [WatchProvider] = []

@@ -43,7 +43,7 @@ struct LoginView: View {
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary, lineWidth: 3))
                 .webAuthenticationSession(isPresented: $startingAuthenticationSession) {
-                    return WebAuthenticationSession(url: URL(string: SimklAPI.loginURL)!, callbackURLScheme: "whatto") { callbackURL, error in
+                    WebAuthenticationSession(url: URL(string: SimklAPI.loginURL)!, callbackURLScheme: "whatto") { callbackURL, error in
                         if let callbackURL = callbackURL {
                             print("Callback URL received")
                             if let codeValue = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems?.first(where: { $0.name == "code" })?.value {

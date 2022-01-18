@@ -51,7 +51,6 @@ struct MainView: View {
                 while (randMovie == t) {
                     randMovie = mainVM.watchlist.filtered.randomElement()?.movie
                 }
-                print(randMovie ?? "No Movie")
             }
             .padding()
             .foregroundColor(.white)
@@ -85,18 +84,10 @@ struct MainView: View {
             .cornerRadius(10)
         }
         .padding()
-        .onAppear {
-            mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { fetchResult in
-                print("Get Watchlist result: \(fetchResult)")
-                switch (fetchResult) {
-                case .success:
-                    print("Watchlist fetch succeeded, will filter")
-                    mainVM.watchlist.refreshFilteredList()
-                    disabledRandomizer = false
-                case.failure:
-                    print("Watchlist fetch failed, won't filter")
-                }
-            }
+        .task {
+            await mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!)
+            mainVM.watchlist.refreshFilteredList()
+            disabledRandomizer = false
         }
     }
 }
