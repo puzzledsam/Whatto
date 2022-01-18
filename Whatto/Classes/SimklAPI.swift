@@ -71,7 +71,7 @@ class SimklAPI {
         task.resume()
     }
     
-    func getWatchlist(accessToken: String, type: String = "movies", status: String = "plantowatch", completion: @escaping (Result<Watchlist,APIError>) -> Void) {
+    func getWatchlist(accessToken: String, type: String = "movies", status: String = "plantowatch", completion: @escaping (Result<SimklWatchlist,APIError>) -> Void) {
         let url = URL(string: "https://api.simkl.com/sync/all-items/\(type)/\(status)")!
         
         let headers = ["content-type": "application/json",
@@ -84,7 +84,7 @@ class SimklAPI {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 print("Received response from the API")
-                let decodedResponse = try? JSONDecoder().decode(Watchlist.self, from: data)
+                let decodedResponse = try? JSONDecoder().decode(SimklWatchlist.self, from: data)
                 if let watchlist = decodedResponse{
                     print("Decoded watchlist JSON")
                     completion(.success(watchlist))

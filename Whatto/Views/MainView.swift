@@ -13,7 +13,7 @@ struct MainView: View {
     @StateObject private var mainVM = MainViewModel()
     
     @State private var disabledRandomizer = true
-    @State var randMovie: Movie? = nil
+    @State var randMovie: SimklMovie? = nil
     
     @State private var netflixFilterToggle = false
     @State private var disneyFilterToggle = false
@@ -49,7 +49,7 @@ struct MainView: View {
             Button("Pick a random movie") {
                 let t = randMovie
                 while (randMovie == t) {
-                    randMovie = mainVM.filteredList.randomElement()?.movie
+                    randMovie = mainVM.watchlist.filtered.randomElement()?.movie
                 }
                 print(randMovie ?? "No Movie")
             }
@@ -61,14 +61,14 @@ struct MainView: View {
             
             Toggle("Netflix", isOn: $netflixFilterToggle)
                 .onChange(of: netflixFilterToggle) { value in
-                    mainVM.serviceFilters[.Netflix] = value
-                    mainVM.refreshFilteredList()
+                    mainVM.watchlist.serviceFilters[.Netflix] = value
+                    mainVM.watchlist.refreshFilteredList()
                 }
             
             Toggle("Disney", isOn: $disneyFilterToggle)
                 .onChange(of: disneyFilterToggle) { value in
-                    mainVM.serviceFilters[.DisneyPlus] = value
-                    mainVM.refreshFilteredList()
+                    mainVM.watchlist.serviceFilters[.DisneyPlus] = value
+                    mainVM.watchlist.refreshFilteredList()
                 }
             
             Divider()
@@ -88,10 +88,15 @@ struct MainView: View {
         .onAppear {
             mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { fetchResult in
                 print("Get Watchlist result: \(fetchResult)")
+                print("Watchlist fetch returned 1")
+                print("Watchlist fetch returned 2")
+                print("Watchlist fetch returned 3")
+                print("Watchlist fetch returned 4")
+                print("Watchlist fetch returned 5")
                 switch (fetchResult) {
                 case .success:
                     print("Watchlist fetch succeeded, will filter")
-                    mainVM.refreshFilteredList()
+                    mainVM.watchlist.refreshFilteredList()
                     disabledRandomizer = false
                 case.failure:
                     print("Watchlist fetch failed, won't filter")

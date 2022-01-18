@@ -7,26 +7,26 @@
 
 import Foundation
 
-struct Watchlist: Codable {
-    let movies: [Movies]?
+struct SimklWatchlist: Codable {
+    let movies: [SimklMovies]?
 }
 
-struct Movies: Codable, Equatable {
-    let movie: Movie
+struct SimklMovies: Codable {
+    let movie: SimklMovie
 }
 
-struct Movie: Codable, Equatable {
+struct SimklMovie: Codable, Equatable {
     let title: String
     let poster: String?
     let year: Int?
-    let ids: MovieIDs?
+    let ids: SimklMovieIDs?
     
-    static func ==(a: Movie, b: Movie) -> Bool {
+    static func ==(a: SimklMovie, b: SimklMovie) -> Bool {
         return a.title == b.title && a.year == b.year
     }
 }
 
-struct MovieIDs: Codable {
+struct SimklMovieIDs: Codable {
     let simkl: Int?
     let tmdb: String?
 }

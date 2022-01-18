@@ -8,19 +8,17 @@
 import Foundation
 class MainViewModel: ObservableObject {
     
-    @Published var watchlist: Watchlist? = nil
-    @Published var filteredList: [Movies] = []
-    
-    var serviceFilters: [WatchProvider: Bool] = [:]
+    @Published var watchlist = Watchlist()
     
     func getWatchlist(accessToken: String, completion: @escaping (Result<Bool,SimklAPI.APIError>) -> Void) {
-        SimklAPI.shared.getWatchlist(accessToken: accessToken) { [unowned self](result: Result<Watchlist, SimklAPI.APIError>) in
+        SimklAPI.shared.getWatchlist(accessToken: accessToken) { [unowned self](result: Result<SimklWatchlist, SimklAPI.APIError>) in
             switch result {
             case .success(let decodedList):
-                DispatchQueue.main.sync {
-                    watchlist = decodedList
-                    filteredList = decodedList.movies ?? []
-                }
+                
+                decodedList.movies?.forEach({ SimklMovie in
+                    watchlist.addMovie(SimklMovie.movie, providers: []) // TODO: Finish re-implementing providers
+                })
+                
                 completion(.success(true))
             case .failure:
                 completion(.failure(SimklAPI.APIError.error))
@@ -28,62 +26,22 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    func filterByService(_ serviceName: String?, completion: @escaping (Result<[Movies], TmdbAPI.APIError>) -> Void) {
-        if let serviceName = serviceName {
-            var temp: [Movies] = []
-            let dspGroup = DispatchGroup()
-            
-            for movie in watchlist?.movies ?? [] {
-                dspGroup.enter()
-                TmdbAPI.shared.getMovieWatchProviders(movieId: Int(movie.movie.ids?.tmdb ?? "0") ?? 0) { (result: Result<TmdbMovieWatchProviders, TmdbAPI.APIError>) in
-                    switch result {
-                    case .success(let providers):
-                        for provider in providers.results?.ca?.flatrate ?? [] {
-                            if provider.isProvider(serviceName){
-                                temp.append(movie)
-                            }
-                        }
-                    case .failure:
-                        completion(.failure(TmdbAPI.APIError.error))
-                        break
-                    }
-                    
-                    dspGroup.leave()
-                }
-            }
-            
-            dspGroup.notify(queue: .main) {
-                completion(.success(temp))
-            }
-        } else {
-            completion(.success(watchlist?.movies ?? []))
-        }
-    }
-    
-    func refreshFilteredList() {
-        filteredList = []
+    func getMovieWatchProviders(tmdbId: String, completion: @escaping (Result<[WatchProvider],TmdbAPI.APIError>) -> Void) {
+        var providerList: [WatchProvider] = []
         
-        if !serviceFilters.values.contains(true) {filteredList = watchlist?.movies ?? []}
-        
-        for filter in serviceFilters {
-            if filter.value {
-                filterByService(filter.key.rawValue) { filterResult in
-                    switch (filterResult) {
-                    case .success(let movieList):
-                        for i in movieList {
-                            if !self.filteredList.contains(i) {
-                                self.filteredList.append(i)
-                            }
-                        }
-                    case .failure:
-                        print("Refreshing filtered list failed!")
-                        return
+        TmdbAPI.shared.getMovieWatchProviders(movieId: Int(tmdbId) ?? 0) { (result: Result<TmdbMovieWatchProviders, TmdbAPI.APIError>) in
+            switch result {
+            case .success(let movieProviders):
+                for provider in (movieProviders.results?.ca?.flatrate ?? []) {
+                    if let validProvider = WatchProvider(rawValue: provider.providerName ?? "") {
+                        providerList.append(validProvider)
                     }
                 }
+            case .failure:
+                completion(.failure(TmdbAPI.APIError.error))
+                break
             }
         }
-        
-        print("Filter watchlist result: \(filteredList)")
     }
     
 }

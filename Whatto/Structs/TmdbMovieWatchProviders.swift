@@ -7,19 +7,19 @@
 
 import Foundation
 
-enum WatchProvider: String {
+enum WatchProvider: String, CaseIterable {
     case Netflix = "Netflix"
     case DisneyPlus = "Disney Plus"
 }
 
 struct TmdbMovieWatchProviders: Codable {
     let id: Int?
-    let results: Results?
+    let results: TmdbProviderResults?
 }
 
 // MARK: - Results
-struct Results: Codable {
-    let us, ca: WatchCountryDetails?
+struct TmdbProviderResults: Codable {
+    let us, ca: TmdbWatchCountryDetails?
 
     enum CodingKeys: String, CodingKey {
         case us = "US"
@@ -28,13 +28,13 @@ struct Results: Codable {
 }
 
 // MARK: - WatchCountryDetails
-struct WatchCountryDetails: Codable {
+struct TmdbWatchCountryDetails: Codable {
     let link: String?
-    let flatrate, rent, buy: [WatchLinks]?
+    let flatrate, rent, buy: [TmdbWatchLinks]?
 }
 
 // MARK: - WatchLinks
-struct WatchLinks: Codable {
+struct TmdbWatchLinks: Codable {
     let displayPriority: Int?
     let logoPath: String?
     let providerID: Int?

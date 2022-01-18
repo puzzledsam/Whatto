@@ -11,7 +11,7 @@
 		511CAA39276BF6A4007D7FD1 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 511CAA38276BF6A4007D7FD1 /* SwiftKeychainWrapper */; };
 		51265205276AA36E001A366C /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = 51265204276AA36E001A366C /* BetterSafariView */; };
 		513E4919277026C30057E49A /* ApiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513E4918277026C30057E49A /* ApiKeys.swift */; };
-		51921469276C69E500D5119E /* Watchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51921468276C69E500D5119E /* Watchlist.swift */; };
+		51921469276C69E500D5119E /* SimklWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51921468276C69E500D5119E /* SimklWatchlist.swift */; };
 		519E0D56276BCC7F00323F1F /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519E0D55276BCC7F00323F1F /* LoginViewModel.swift */; };
 		519E0D58276BCF7300323F1F /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519E0D57276BCF7300323F1F /* Authentication.swift */; };
 		51B9327D276A7DAD00B73682 /* WhattoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9327C276A7DAD00B73682 /* WhattoApp.swift */; };
@@ -19,6 +19,8 @@
 		51B93281276A7DAE00B73682 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B93280276A7DAE00B73682 /* Assets.xcassets */; };
 		51B93284276A7DAE00B73682 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B93283276A7DAE00B73682 /* Preview Assets.xcassets */; };
 		51B9328B276A84B400B73682 /* SimklAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9328A276A84B400B73682 /* SimklAPI.swift */; };
+		51BF4373279763C70009A9DF /* Watchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BF4372279763C70009A9DF /* Watchlist.swift */; };
+		51BF4375279765970009A9DF /* MovieDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BF4374279765970009A9DF /* MovieDetails.swift */; };
 		51CA2D2B2773C7EC000EF6A7 /* TmdbAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CA2D2A2773C7EC000EF6A7 /* TmdbAPI.swift */; };
 		51CA2D2D2773CD13000EF6A7 /* TmdbMovieWatchProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CA2D2C2773CD13000EF6A7 /* TmdbMovieWatchProviders.swift */; };
 		51F2489E276B0030004B9754 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2489D276B0030004B9754 /* MainView.swift */; };
@@ -27,7 +29,7 @@
 /* Begin PBXFileReference section */
 		510A4200276D369000709864 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		513E4918277026C30057E49A /* ApiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ApiKeys.swift; path = Whatto/Classes/ApiKeys.swift; sourceTree = SOURCE_ROOT; };
-		51921468276C69E500D5119E /* Watchlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watchlist.swift; sourceTree = "<group>"; };
+		51921468276C69E500D5119E /* SimklWatchlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimklWatchlist.swift; sourceTree = "<group>"; };
 		519E0D55276BCC7F00323F1F /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		519E0D57276BCF7300323F1F /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		51B93279276A7DAD00B73682 /* Whatto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whatto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +38,8 @@
 		51B93280276A7DAE00B73682 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		51B93283276A7DAE00B73682 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		51B9328A276A84B400B73682 /* SimklAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimklAPI.swift; sourceTree = "<group>"; };
+		51BF4372279763C70009A9DF /* Watchlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watchlist.swift; sourceTree = "<group>"; };
+		51BF4374279765970009A9DF /* MovieDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetails.swift; sourceTree = "<group>"; };
 		51CA2D2A2773C7EC000EF6A7 /* TmdbAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbAPI.swift; sourceTree = "<group>"; };
 		51CA2D2C2773CD13000EF6A7 /* TmdbMovieWatchProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbMovieWatchProviders.swift; sourceTree = "<group>"; };
 		51F2489D276B0030004B9754 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -57,8 +61,9 @@
 		510A41FE276D365B00709864 /* Structs */ = {
 			isa = PBXGroup;
 			children = (
-				51921468276C69E500D5119E /* Watchlist.swift */,
+				51921468276C69E500D5119E /* SimklWatchlist.swift */,
 				51CA2D2C2773CD13000EF6A7 /* TmdbMovieWatchProviders.swift */,
+				51BF4374279765970009A9DF /* MovieDetails.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -88,6 +93,7 @@
 				519E0D57276BCF7300323F1F /* Authentication.swift */,
 				51B9328A276A84B400B73682 /* SimklAPI.swift */,
 				51CA2D2A2773C7EC000EF6A7 /* TmdbAPI.swift */,
+				51BF4372279763C70009A9DF /* Watchlist.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -212,12 +218,14 @@
 				51F2489E276B0030004B9754 /* MainView.swift in Sources */,
 				513E4919277026C30057E49A /* ApiKeys.swift in Sources */,
 				51B9327D276A7DAD00B73682 /* WhattoApp.swift in Sources */,
+				51BF4375279765970009A9DF /* MovieDetails.swift in Sources */,
 				519E0D56276BCC7F00323F1F /* LoginViewModel.swift in Sources */,
+				51BF4373279763C70009A9DF /* Watchlist.swift in Sources */,
 				51B9328B276A84B400B73682 /* SimklAPI.swift in Sources */,
 				519E0D58276BCF7300323F1F /* Authentication.swift in Sources */,
 				51CA2D2D2773CD13000EF6A7 /* TmdbMovieWatchProviders.swift in Sources */,
 				51CA2D2B2773C7EC000EF6A7 /* TmdbAPI.swift in Sources */,
-				51921469276C69E500D5119E /* Watchlist.swift in Sources */,
+				51921469276C69E500D5119E /* SimklWatchlist.swift in Sources */,
 				510A4201276D369000709864 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
