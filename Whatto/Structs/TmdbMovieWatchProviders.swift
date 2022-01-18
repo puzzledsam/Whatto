@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum WatchProvider: String {
+    case Netflix = "Netflix"
+    case DisneyPlus = "Disney Plus"
+}
+
 struct TmdbMovieWatchProviders: Codable {
     let id: Int?
     let results: Results?

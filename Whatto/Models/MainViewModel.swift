@@ -11,6 +11,8 @@ class MainViewModel: ObservableObject {
     @Published var watchlist: Watchlist? = nil
     @Published var filteredList: [Movies] = []
     
+    var serviceFilters: [WatchProvider] = []
+    
     func getWatchlist(accessToken: String, completion: @escaping (Result<Bool,SimklAPI.APIError>) -> Void) {
         SimklAPI.shared.getWatchlist(accessToken: accessToken) { [unowned self](result: Result<Watchlist, SimklAPI.APIError>) in
             switch result {
@@ -26,34 +28,74 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    func filterByService(_ serviceName: String, completion: @escaping (Result<[Movies], TmdbAPI.APIError>) -> Void) {
-        var temp: [Movies] = []
-        let dspGroup = DispatchGroup()
+    func filterByService(_ serviceName: String?, completion: @escaping (Result<[Movies], TmdbAPI.APIError>) -> Void) {
+        if let serviceName = serviceName {
+            var temp: [Movies] = []
+            let dspGroup = DispatchGroup()
+            
+            for movie in watchlist?.movies ?? [] {
+                dspGroup.enter()
+                TmdbAPI.shared.getMovieWatchProviders(movieId: Int(movie.movie.ids?.tmdb ?? "0") ?? 0) { (result: Result<TmdbMovieWatchProviders, TmdbAPI.APIError>) in
+                    switch result {
+                    case .success(let providers):
+                        for provider in providers.results?.ca?.flatrate ?? [] {
+                            if provider.isProvider(serviceName){
+                                temp.append(movie)
+                            }
+                        }
+                    case .failure:
+                        completion(.failure(TmdbAPI.APIError.error))
+                        break
+                    }
+                    
+                    dspGroup.leave()
+                }
+            }
+            
+            dspGroup.notify(queue: .main) {
+                completion(.success(temp))
+            }
+        } else {
+            completion(.success(watchlist?.movies ?? []))
+        }
+    }
+    
+    func addServiceFilter(_ watchProvider: WatchProvider) {
+        serviceFilters.append(watchProvider)
+    }
+    
+    func removeServiceFilter(_ watchProvider: WatchProvider) {
+        if let index = serviceFilters.firstIndex(of: watchProvider) {
+            serviceFilters.remove(at: index)
+        }
+    }
+    
+    func clearServiceFilters() {
+        serviceFilters = []
+    }
+    
+    func refreshFilteredList() {
+        filteredList = []
         
-        for movie in watchlist?.movies ?? [] {
-            dspGroup.enter()
-            TmdbAPI.shared.getMovieWatchProviders(movieId: Int(movie.movie.ids?.tmdb ?? "0") ?? 0) { (result: Result<TmdbMovieWatchProviders, TmdbAPI.APIError>) in
-                switch result {
-                case .success(let providers):
-                    for provider in providers.results?.ca?.flatrate ?? [] {
-                        if provider.isProvider(serviceName){
-                            temp.append(movie)
+        if serviceFilters.isEmpty {filteredList = watchlist?.movies ?? []}
+        
+        for filter in serviceFilters {
+            filterByService(filter.rawValue) { filterResult in
+                switch (filterResult) {
+                case .success(let movieList):
+                    for i in movieList {
+                        if !self.filteredList.contains(i) {
+                            self.filteredList.append(i)
                         }
                     }
                 case .failure:
-                    completion(.failure(TmdbAPI.APIError.error))
-                    break
+                    print("Refreshing filtered list failed!")
+                    return
                 }
-                
-                dspGroup.leave()
             }
         }
         
-        dspGroup.notify(queue: .main) {
-            self.filteredList = temp
-            completion(.success(temp))
-        }
-        
+        print("Filter watchlist result: \(filteredList)")
     }
     
 }

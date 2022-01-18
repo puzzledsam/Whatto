@@ -12,12 +12,13 @@ struct MainView: View {
     @EnvironmentObject var authentication: Authentication
     @StateObject private var mainVM = MainViewModel()
     
-    @State var disabledRandomizer = true
+    @State private var disabledRandomizer = true
     @State var randMovie: Movie? = nil
+    @State private var netflixFilterToggle = false
+    @State private var disneyFilterToggle = false
     
     var body: some View {
         VStack {
-            
             if let selectedMovie = randMovie {
                 VStack {
                     Text("\(selectedMovie.title) (\(String(selectedMovie.year ?? 0)))")
@@ -30,27 +31,24 @@ struct MainView: View {
                             image
                                 .resizable()
                                 .scaledToFit()
-                                .onTapGesture {
-                                    mainVM.filterByService("Netflix") { result in
-                                        print(result)
-                                    }
-                                }
+                                .cornerRadius(10)
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(.primary, lineWidth: 3))
                         } placeholder: {
                             ProgressView()
+                                .frame(maxHeight: .infinity)
                         }
                     }
                 }
                 .padding()
             } else {
                 Text("To begin, tap the button below")
+                    .frame(maxHeight: .infinity)
             }
             
             Button("Pick a random movie") {
-                withAnimation {
-                    let t = randMovie
-                    while (randMovie == t) {
-                        randMovie = mainVM.filteredList.randomElement()?.movie
-                    }
+                let t = randMovie
+                while (randMovie == t) {
+                    randMovie = mainVM.filteredList.randomElement()?.movie
                 }
                 print(randMovie ?? "No Movie")
             }
@@ -60,8 +58,29 @@ struct MainView: View {
             .cornerRadius(10)
             .disabled(disabledRandomizer)
             
-            Spacer()
-                .frame(height: 30.0)
+            Toggle("Netflix", isOn: $netflixFilterToggle)
+                .onChange(of: netflixFilterToggle) { value in
+                    if value {
+                        mainVM.addServiceFilter(WatchProvider.Netflix)
+                    } else {
+                        mainVM.removeServiceFilter(WatchProvider.Netflix)
+                    }
+                    
+                    mainVM.refreshFilteredList()
+                }
+            
+            Toggle("Disney", isOn: $disneyFilterToggle)
+                .onChange(of: disneyFilterToggle) { value in
+                    if value {
+                        mainVM.addServiceFilter(WatchProvider.DisneyPlus)
+                    } else {
+                        mainVM.removeServiceFilter(WatchProvider.DisneyPlus)
+                    }
+                    
+                    mainVM.refreshFilteredList()
+                }
+            
+            Divider()
             
             Button("Log Out") {
                 if authentication.storeAccessToken(nil) {
@@ -74,21 +93,15 @@ struct MainView: View {
             .background(Color.blue)
             .cornerRadius(10)
         }
+        .padding()
         .onAppear {
             mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { fetchResult in
                 print("Get Watchlist result: \(fetchResult)")
                 switch (fetchResult) {
                 case .success:
-                    print("Watchlist fetch succeeded, will filter for Netflix only")
-                    mainVM.filterByService("Netflix") { filterResult in
-                        print("Filter watchlist result: \(filterResult)")
-                        switch (filterResult) {
-                        case .success:
-                            disabledRandomizer = false
-                        case .failure:
-                            break
-                        }
-                    }
+                    print("Watchlist fetch succeeded, will filter")
+                    mainVM.refreshFilteredList()
+                    disabledRandomizer = false
                 case.failure:
                     print("Watchlist fetch failed, won't filter")
                 }

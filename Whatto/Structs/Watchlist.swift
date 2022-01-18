@@ -11,7 +11,7 @@ struct Watchlist: Codable {
     let movies: [Movies]?
 }
 
-struct Movies: Codable {
+struct Movies: Codable, Equatable {
     let movie: Movie
 }
 
