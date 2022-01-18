@@ -43,7 +43,6 @@ struct LoginView: View {
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary, lineWidth: 3))
                 .webAuthenticationSession(isPresented: $startingAuthenticationSession) {
-                    showProgressView = true
                     return WebAuthenticationSession(url: URL(string: SimklAPI.loginURL)!, callbackURLScheme: "whatto") { callbackURL, error in
                         if let callbackURL = callbackURL {
                             print("Callback URL received")
@@ -51,6 +50,8 @@ struct LoginView: View {
                                 print("Decoded auth code from callback URL, requesting exchange for access token")
                                 Task {
                                     do {
+                                        showProgressView = true
+                                        
                                         let token = try await SimklAPI.shared.authenticate(authCode: codeValue)
                                         
                                         print("Sign in successful")
