@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		510A4201276D369000709864 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510A4200276D369000709864 /* MainViewModel.swift */; };
 		511CAA39276BF6A4007D7FD1 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 511CAA38276BF6A4007D7FD1 /* SwiftKeychainWrapper */; };
+		51261CAE2797BE7B00DBA81E /* ShakeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51261CAD2797BE7B00DBA81E /* ShakeExtensions.swift */; };
 		51265205276AA36E001A366C /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = 51265204276AA36E001A366C /* BetterSafariView */; };
 		513E4919277026C30057E49A /* ApiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513E4918277026C30057E49A /* ApiKeys.swift */; };
 		51921469276C69E500D5119E /* SimklWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51921468276C69E500D5119E /* SimklWatchlist.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		510A4200276D369000709864 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		51261CAD2797BE7B00DBA81E /* ShakeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeExtensions.swift; sourceTree = "<group>"; };
 		513E4918277026C30057E49A /* ApiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ApiKeys.swift; path = Whatto/Classes/ApiKeys.swift; sourceTree = SOURCE_ROOT; };
 		51921468276C69E500D5119E /* SimklWatchlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimklWatchlist.swift; sourceTree = "<group>"; };
 		519E0D57276BCF7300323F1F /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				51B9327C276A7DAD00B73682 /* WhattoApp.swift */,
+				51261CAD2797BE7B00DBA81E /* ShakeExtensions.swift */,
 				519E0D53276BC8B800323F1F /* Views */,
 				510A41FE276D365B00709864 /* Structs */,
 				519E0D54276BC8C400323F1F /* Classes */,
@@ -216,6 +219,7 @@
 				513E4919277026C30057E49A /* ApiKeys.swift in Sources */,
 				51B9327D276A7DAD00B73682 /* WhattoApp.swift in Sources */,
 				51BF4375279765970009A9DF /* MovieDetails.swift in Sources */,
+				51261CAE2797BE7B00DBA81E /* ShakeExtensions.swift in Sources */,
 				51BF4373279763C70009A9DF /* Watchlist.swift in Sources */,
 				51B9328B276A84B400B73682 /* SimklAPI.swift in Sources */,
 				519E0D58276BCF7300323F1F /* Authentication.swift in Sources */,

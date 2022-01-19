@@ -117,6 +117,15 @@ struct MainView: View {
             .cornerRadius(10)
         }
         .padding()
+        .onShake {
+            withAnimation {
+                var t = randMovie
+                while (t?.movie == randMovie?.movie) {
+                    t = mainVM.watchlist.filtered.randomElement()
+                }
+                randMovie = t
+            }
+        }
         .task {
             await mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!)
             mainVM.watchlist.refreshFilteredList()
