@@ -7,11 +7,27 @@
 
 import Foundation
 
-enum WatchProvider: String, CaseIterable {
+// MARK: - Watch Providers
+enum WatchProviders: String {
     case Netflix = "Netflix"
     case DisneyPlus = "Disney Plus"
 }
 
+struct WatchProvider {
+    let provider: WatchProviders
+    let logoPath: String?
+    
+    func getURL() -> String {
+        switch self.provider {
+        case .Netflix:
+            return "nflx://"
+        case .DisneyPlus:
+            return "disneyplus://"
+        }
+    }
+}
+
+// MARK: - TmdbMovieWatchProviders
 struct TmdbMovieWatchProviders: Codable {
     let id: Int?
     let results: TmdbProviderResults?

@@ -7,14 +7,17 @@
 
 import Foundation
 
+// MARK: - SimklWatchlist
 struct SimklWatchlist: Codable {
     let movies: [SimklMovies]?
 }
 
+// MARK: - SimklMovies
 struct SimklMovies: Codable {
     let movie: SimklMovie
 }
 
+// MARK: - SimklMovie
 struct SimklMovie: Codable, Equatable {
     let title: String
     let poster: String?
@@ -22,10 +25,11 @@ struct SimklMovie: Codable, Equatable {
     let ids: SimklMovieIDs?
     
     static func ==(a: SimklMovie, b: SimklMovie) -> Bool {
-        return a.title == b.title && a.year == b.year
+        return a.ids?.simkl == b.ids?.simkl
     }
 }
 
+// MARK: - SimklMovieIDs
 struct SimklMovieIDs: Codable {
     let simkl: Int?
     let tmdb: String?

@@ -13,19 +13,18 @@ struct MainView: View {
     @StateObject private var mainVM = MainViewModel()
     
     @State private var disabledRandomizer = true
-    @State var randMovie: SimklMovie? = nil
+    @State var randMovie: MovieDetails? = nil
     
     @State private var netflixFilterToggle = false
     @State private var disneyFilterToggle = false
     
     var body: some View {
         VStack {
-            if let selectedMovie = randMovie {
+            if let selectedMovie = randMovie?.movie {
                 VStack {
                     Text("\(selectedMovie.title) (\(String(selectedMovie.year ?? 0)))")
                         .font(.title)
                         .fontWeight(.bold)
-                        .fixedSize(horizontal: false, vertical: true)
                     
                     if let posterId = selectedMovie.poster {
                         AsyncImage(url: URL(string: "https://simkl.in/posters/\(posterId)_m.jpg")) { image in
@@ -39,8 +38,31 @@ struct MainView: View {
                                 .frame(maxHeight: .infinity)
                         }
                     }
+                    
+                    if let providerData =  randMovie?.providers.first {
+                        VStack {
+                            Text("Available on")
+                                .font(.caption)
+                            Link(destination: URL(string: providerData.getURL())!) {
+                                if let providerLogoURL = providerData.logoPath {
+                                    AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/original\(providerLogoURL)")!) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .cornerRadius(10)
+                                            .overlay (RoundedRectangle(cornerRadius: 10).stroke(Color(UIColor.label), lineWidth: 1))
+                                    } placeholder: {
+                                        Text(providerData.provider.rawValue)
+                                    }
+                                        .frame(maxHeight: 50)
+                                } else {
+                                    Text("\(providerData.provider.rawValue)")
+                                }
+                            }
+                        }
+                        .padding()
+                    }
                 }
-                .padding()
             } else {
                 Text("To begin, tap the button below")
                     .frame(maxHeight: .infinity)
@@ -48,10 +70,11 @@ struct MainView: View {
             
             Button(action: {
                 withAnimation {
-                    let t = randMovie
-                    while (randMovie == t) {
-                        randMovie = mainVM.watchlist.filtered.randomElement()?.movie
+                    var t = randMovie
+                    while (t?.movie == randMovie?.movie) {
+                        t = mainVM.watchlist.filtered.randomElement()
                     }
+                    randMovie = t
                 }
             }, label: {
                 if disabledRandomizer {
@@ -90,7 +113,7 @@ struct MainView: View {
             }
             .padding()
             .foregroundColor(.white)
-            .background(Color.blue)
+            .background(Color.red)
             .cornerRadius(10)
         }
         .padding()

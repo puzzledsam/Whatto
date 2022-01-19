@@ -16,7 +16,7 @@ class MainViewModel: ObservableObject {
             
             for SimklMovie in SimklWatchlist.movies ?? [] {
                 let providers = await getMovieWatchProviders(tmdbId: SimklMovie.movie.ids?.tmdb ?? "")
-                watchlist.addMovie(SimklMovie.movie, providers: providers) // TODO: Finish re-implementing providers
+                watchlist.addMovie(SimklMovie.movie, providers: providers)
             }
         } catch {
             print("Watchlist fetch request failed with error: \(error)")
@@ -30,8 +30,9 @@ class MainViewModel: ObservableObject {
             let movieProviders = try await TmdbAPI.shared.getMovieWatchProviders(movieId: Int(tmdbId) ?? 0)
             
             for provider in (movieProviders.results?.ca?.flatrate ?? []) {
-                if let validProvider = WatchProvider(rawValue: provider.providerName ?? "") {
-                    providerList.append(validProvider)
+                if let validProvider = WatchProviders(rawValue: provider.providerName ?? "") {
+                    print("Provider logo: \(provider.logoPath ?? "")")
+                    providerList.append(WatchProvider(provider: validProvider, logoPath: provider.logoPath))
                 }
             }
         } catch {

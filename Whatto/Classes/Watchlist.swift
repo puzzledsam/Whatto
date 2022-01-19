@@ -12,7 +12,7 @@ class Watchlist: ObservableObject {
     private var all: [MovieDetails] = []
     @Published var filtered: [MovieDetails] = []
     
-    var serviceFilters: [WatchProvider: Bool] = [:]
+    var serviceFilters: [WatchProviders: Bool] = [:]
     
     func addMovie(_ movie: SimklMovie, providers: [WatchProvider]) {
         all.append(MovieDetails(movie: movie, providers: providers))
@@ -24,12 +24,12 @@ class Watchlist: ObservableObject {
         }
     }
     
-    func filteredByService(_ service: WatchProvider?) -> [MovieDetails] {
+    func filteredByService(_ service: WatchProviders?) -> [MovieDetails] {
         if let service = service {
             var temp: [MovieDetails] = []
             
             for movie in all {
-                if movie.providers.contains(service) {
+                if movie.providers.contains(where: { $0.provider == service }) {
                     temp.append(movie)
                 }
             }
