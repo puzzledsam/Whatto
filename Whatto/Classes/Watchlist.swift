@@ -46,7 +46,6 @@ class Watchlist: ObservableObject {
         
         for filter in serviceFilters {
             if filter.value {
-                print("After \(filter.key.rawValue) filter: \(filteredByService(filter.key))")
                 filteredByService(filter.key).forEach { movieDetails in
                     if !filtered.contains(where: { $0.movie == movieDetails.movie }) {
                         filtered.append(movieDetails)
@@ -54,7 +53,5 @@ class Watchlist: ObservableObject {
                 }
             }
         }
-        
-        print("Filter watchlist result: \(filtered)")
     }
 }

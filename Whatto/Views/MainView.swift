@@ -46,17 +46,27 @@ struct MainView: View {
                     .frame(maxHeight: .infinity)
             }
             
-            Button("Pick a random movie") {
-                let t = randMovie
-                while (randMovie == t) {
-                    randMovie = mainVM.watchlist.filtered.randomElement()?.movie
+            Button(action: {
+                withAnimation {
+                    let t = randMovie
+                    while (randMovie == t) {
+                        randMovie = mainVM.watchlist.filtered.randomElement()?.movie
+                    }
                 }
-            }
+            }, label: {
+                if disabledRandomizer {
+                    ProgressView()
+                } else {
+                    Text("Pick a random movie")
+                }
+            })
             .padding()
             .foregroundColor(.white)
             .background(disabledRandomizer ? Color.gray : Color.blue)
             .cornerRadius(10)
             .disabled(disabledRandomizer)
+            
+            Divider()
             
             Toggle("Netflix", isOn: $netflixFilterToggle)
                 .onChange(of: netflixFilterToggle) { value in
@@ -87,7 +97,10 @@ struct MainView: View {
         .task {
             await mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!)
             mainVM.watchlist.refreshFilteredList()
-            disabledRandomizer = false
+            
+            withAnimation {
+                disabledRandomizer = false
+            }
         }
     }
 }
