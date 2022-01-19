@@ -34,8 +34,6 @@ class SimklAPI {
         
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        await Task.sleep(UInt64(5 * Double(NSEC_PER_SEC)))
-        
         let decodedResponse = try JSONDecoder().decode([String: String].self, from: data)
         guard let accessToken = decodedResponse["access_token"] else {
             throw APIError.error
