@@ -46,18 +46,27 @@ struct MainView: View {
                     .frame(maxHeight: .infinity)
             }
             
-            Button("Pick a random movie") {
-                let t = randMovie
-                while (randMovie == t) {
-                    randMovie = mainVM.watchlist.filtered.randomElement()?.movie
+            Button(action: {
+                withAnimation {
+                    let t = randMovie
+                    while (randMovie == t) {
+                        randMovie = mainVM.watchlist.filtered.randomElement()?.movie
+                    }
                 }
-                print(randMovie ?? "No Movie")
-            }
+            }, label: {
+                if disabledRandomizer {
+                    ProgressView()
+                } else {
+                    Text("Pick a random movie")
+                }
+            })
             .padding()
             .foregroundColor(.white)
             .background(disabledRandomizer ? Color.gray : Color.blue)
             .cornerRadius(10)
             .disabled(disabledRandomizer)
+            
+            Divider()
             
             Toggle("Netflix", isOn: $netflixFilterToggle)
                 .onChange(of: netflixFilterToggle) { value in
@@ -85,22 +94,12 @@ struct MainView: View {
             .cornerRadius(10)
         }
         .padding()
-        .onAppear {
-            mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!) { fetchResult in
-                print("Get Watchlist result: \(fetchResult)")
-                print("Watchlist fetch returned 1")
-                print("Watchlist fetch returned 2")
-                print("Watchlist fetch returned 3")
-                print("Watchlist fetch returned 4")
-                print("Watchlist fetch returned 5")
-                switch (fetchResult) {
-                case .success:
-                    print("Watchlist fetch succeeded, will filter")
-                    mainVM.watchlist.refreshFilteredList()
-                    disabledRandomizer = false
-                case.failure:
-                    print("Watchlist fetch failed, won't filter")
-                }
+        .task {
+            await mainVM.getWatchlist(accessToken: authentication.retrieveAccessToken()!)
+            mainVM.watchlist.refreshFilteredList()
+            
+            withAnimation {
+                disabledRandomizer = false
             }
         }
     }

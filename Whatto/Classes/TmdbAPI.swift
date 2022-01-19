@@ -11,38 +11,23 @@ class TmdbAPI {
     
     static let shared = TmdbAPI()
     enum APIError: Error {
-        case error
+        case error, invalidURL
     }
     
-    func getMovieWatchProviders(movieId: Int, completion: @escaping (Result<TmdbMovieWatchProviders,APIError>) -> Void) {
-        let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)/watch/providers?api_key=\(ApiKeys.getTMDBApiKey(legacy: true))")!
+    func getMovieWatchProviders(movieId: Int) async throws -> TmdbMovieWatchProviders {
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)/watch/providers?api_key=\(ApiKeys.getTMDBApiKey(legacy: true))") else {
+            throw APIError.invalidURL
+        }
         
         let headers = ["content-type": "application/json"]
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = headers
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                print("Received response from the TMDB API")
-                let decodedResponse = try? JSONDecoder().decode(TmdbMovieWatchProviders.self, from: data)
-                if let movieDetails = decodedResponse{
-                    print("Decoded watch provider details JSON for movie with id \(movieId)")
-                    completion(.success(movieDetails))
-                } else {
-                    print("Watch provider details could not be decoded")
-                    completion(.failure(APIError.error))
-                }
-            } else if let error = error {
-                print("HTTP Request Failed \(error)")
-                completion(.failure(APIError.error))
-            } else {
-                print("An unexpected error occured")
-                completion(.failure(APIError.error))
-            }
-        }
+        let (data, _) = try await URLSession.shared.data(for: request)
         
-        task.resume()
+        let decodedResponse = try JSONDecoder().decode(TmdbMovieWatchProviders.self, from: data)
+        return decodedResponse
     }
     
 }
